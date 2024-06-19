@@ -100,4 +100,6 @@ class dachowka {
         g.dispose();
     }
 
+    public void render(Graphics2D g2d) {
+    }
 }
