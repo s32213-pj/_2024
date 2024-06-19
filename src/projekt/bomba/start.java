@@ -2,10 +2,10 @@ package projekt.bomba;
 
 import javax.swing.JFrame;
 
-public class Start {
+class Start {
 
     public static void main (String[] args){
-        Game game = new game();
+        Game game = new Game();
         JFrame window = new JFrame("2048");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
@@ -15,10 +15,5 @@ public class Start {
         window.setVisible(true);
 
         game.start();
-
-
-
-
-
     }
 }
