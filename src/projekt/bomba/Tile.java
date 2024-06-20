@@ -15,8 +15,28 @@ class Tile {
     private Color background;
     private Color text;
     private Font font;
+
+    public Point getSlideTo() {
+        return slideTo;
+    }
+
+    public void setSlideTo(Point slideTo) {
+        this.slideTo = slideTo;
+    }
+
+    private Point slideTo;
     private int x;
     private int y;
+
+    public boolean CanCombine() {
+        return canCombine;
+    }
+
+    public void setCanCombine(boolean canCombine) {
+        this.canCombine = canCombine;
+    }
+
+    private boolean canCombine;
 
     // Konstruktor
     public Tile(int value, int x, int y) {

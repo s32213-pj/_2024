@@ -112,22 +112,94 @@ class GameBoard {
         }
     }
 
+    private void moveTiles(Direction dir) {
+        boolean canMove = false;
+        int horizontalDiretion = 0;
+        int verticalDiretion = 0;
+
+
+        if (dir == Direction.LEFT) { // ta funkcja odpowiada za scalanie kafelków za jednym ruchem --->2248-->0016
+            horizontalDiretion = -1;
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = 0; col < COLS; col++) {
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                }
+            }
+        }
+
+
+        if (dir == Direction.RIGHT) {
+            horizontalDiretion = 1;
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = COLS - 1; col >= 0; col--){
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                }
+            }
+        }
+
+
+        if (dir == Direction.UP) {
+            verticalDiretion = -1;
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = 0; col < COLS; col++) {
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                }
+            }
+        }
+
+
+        if (dir == Direction.DOWN) {
+            verticalDiretion = 1;
+            for (int row = ROWS -1; row >= 0 ; row--){
+                for (int col = 0; col < COLS; col++) {
+                    if (!canMove) {
+                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                }
+            }
+        }
+        for (int row = 0 ; row < ROWS; row++){
+            for(int col= 0 ;col < COLS; col++){
+                Tile current = board[row][col];
+                if (current == null) continue;
+                current.setCanCombine(true);
+            }
+        }
+
+        if (canMove){
+            spawnRandom();
+        }
+    }
+
+
     private void checkKeys() {
         if (Keyboard.typed(KeyEvent.VK_LEFT)) {
+            moveTiles(Direction.LEFT);
             // Przesuwanie kafelków w lewo
             if (!hasStarted) hasStarted = true;
         }
         if (Keyboard.typed(KeyEvent.VK_RIGHT)) {
+            moveTiles(Direction.RIGHT);
             // Przesuwanie kafelków w prawo
             if (!hasStarted) hasStarted = true;
         }
         if (Keyboard.typed(KeyEvent.VK_UP)) {
+            moveTiles(Direction.UP);
             // Przesuwanie kafelków w górę
             if (!hasStarted) hasStarted = true;
         }
         if (Keyboard.typed(KeyEvent.VK_DOWN)) {
+            moveTiles(Direction.DOWN);
             // Przesuwanie kafelków w dół
             if (!hasStarted) hasStarted = true;
         }
     }
 }
+
+
