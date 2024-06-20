@@ -15,7 +15,7 @@ class Game extends JPanel implements KeyListener, Runnable {
     private Thread game;
     private boolean running = false;
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-    private gratablica board;
+    private GameBoard board;
     private long startTime;
     private long elapsed;
     private boolean set;
@@ -25,12 +25,12 @@ class Game extends JPanel implements KeyListener, Runnable {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addKeyListener(this);
 
-        board = new gratablica(WIDTH / 2 - gratablica.BOARD_WIDTH / 2, HEIGHT - gratablica.BOARD_HEIGHT);
+        board = new GameBoard(WIDTH / 2 - GameBoard.BOARD_WIDTH / 2, HEIGHT - GameBoard.BOARD_HEIGHT);
     }
 
     private void update() {
         board.update();
-        Klawa.update();
+        Keyboard.update();
     }
 
     private void render() {
@@ -54,12 +54,12 @@ class Game extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Klawa.keyPressed(e);
+        Keyboard.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Klawa.keyPressed(e);
+        Keyboard.keyPressed(e);
     }
 
     @Override

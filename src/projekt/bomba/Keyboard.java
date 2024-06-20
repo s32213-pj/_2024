@@ -2,10 +2,10 @@ package projekt.bomba;
 
 import java.awt.event.KeyEvent;
 
-class Klawa {
+class Keyboard {
     public static boolean[] pressed = new boolean[256];
     public static boolean[] prev = new boolean[256];
-    private Klawa(){}
+    private Keyboard(){}
     public static void update(){
         for(int i = 0; i < 4; i++){
             if(i == 0) prev[KeyEvent.VK_LEFT] = pressed[KeyEvent.VK_LEFT];
