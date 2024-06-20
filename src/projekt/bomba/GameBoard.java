@@ -5,7 +5,12 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-class GameBoard {
+public class GameBoard {
+    public static final int LEFT = 0;
+    public static final int RIGHT = 1;
+    public static final int UP = 2;
+    public static final int DOWN = 3;
+
     public static final int ROWS = 4;
     public static final int COLS = 4;
     private final int startingTiles = 2;
@@ -28,8 +33,6 @@ class GameBoard {
         this.y = y;
         board = new Tile[ROWS][COLS];
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
-
         createBoardImage();
         start();
     }
@@ -61,7 +64,7 @@ class GameBoard {
         boolean notValid = true;
 
         while (notValid) {
-            int location = random.nextInt(ROWS * COLS);
+            int location = random.nextInt(16);
             int row = location / COLS;
             int col = location % COLS;
             Tile current = board[row][col];
@@ -83,10 +86,12 @@ class GameBoard {
     }
 
     public void render(Graphics2D g) {
+        BufferedImage finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) finalBoard.getGraphics();
+        g2d.setColor(new Color(0, 0, 0, 0));
+        g2d.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
         g2d.drawImage(gameBoard, 0, 0, null);
 
-        // Rysowanie kafelków
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 Tile current = board[row][col];
@@ -97,6 +102,8 @@ class GameBoard {
 
         g.drawImage(finalBoard, x, y, null);
         g2d.dispose();
+
+
     }
 
     public void update() {
@@ -148,19 +155,23 @@ class GameBoard {
         boolean canMove = false;
         Tile current = board[row][col];
         if (current == null) return false;
+
         boolean move = true;
         int newCol = col;
         int newRow = row;
+
         while (move) {
             newCol += horizontalDirection;
             newRow += vectricalDirection;
+
             if (checkOutOfBounds(dir, newRow, newCol)) break;
             if (board[newRow][newCol] == null) {
                 board[newRow][newCol] = current;
+                canMove = true;
                 board[newRow - vectricalDirection][newCol - horizontalDirection] = null;
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
-                canMove = true;
-            } else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].setCanCombine()) {
+            } else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].CanCombine())
+            {
                 board[newRow][newCol].setCanCombine(false);
                 board[newRow][newCol].setValue(board[newRow][newCol].getValue() * 2);
                 canMove = true;
@@ -175,6 +186,7 @@ class GameBoard {
         return canMove;
     }
 
+
     private boolean checkOutOfBounds(Direction dir, int row, int col) {
         if (dir == Direction.LEFT) {
             return col < 0;
@@ -188,52 +200,59 @@ class GameBoard {
         return false;
     }
 
-    private void moveTiles(Direction dir) {
+    public void moveTiles(Direction dir) {
         boolean canMove = false;
-        int horizontalDiretion = 0;
-        int verticalDiretion = 0;
+        int horizontalDirection = 0;
+        int verticalDirection = 0;
 
-
-        if (dir == Direction.LEFT) { // ta funkcja odpowiada za scalanie kafelków za jednym ruchem --->2248-->0016
-            horizontalDiretion = -1;
+        if (dir == Direction.LEFT) {
+            horizontalDirection = -1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLS; col++) {
                     if (!canMove) {
-                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, dir);
+                    }
                 }
             }
         } else if (dir == Direction.RIGHT) {
-            horizontalDiretion = 1;
+            horizontalDirection = 1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = COLS - 1; col >= 0; col--) {
                     if (!canMove) {
-                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, dir);
+                    }
                 }
             }
         } else if (dir == Direction.UP) {
-            verticalDiretion = -1;
+            verticalDirection = -1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLS; col++) {
                     if (!canMove) {
-                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, dir);
+                    }
                 }
             }
         } else if (dir == Direction.DOWN) {
-            verticalDiretion = 1;
+            verticalDirection = 1;
             for (int row = ROWS - 1; row >= 0; row--) {
                 for (int col = 0; col < COLS; col++) {
                     if (!canMove) {
-                        canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                        canMove = move(row, col, horizontalDirection, verticalDirection, dir);
+                    } else {
+                        move(row, col, horizontalDirection, verticalDirection, dir);
+                    }
                 }
             }
-        } else {
-            System.out.println(dir + "is not a valid direction.");
         }
-
+        else {
+            System.out.println(dir + " is not a valid direction.");
+        }
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 Tile current = board[row][col];
@@ -241,46 +260,45 @@ class GameBoard {
                 current.setCanCombine(true);
             }
         }
-
         if (canMove) {
             spawnRandom();
             checkDead();
         }
     }
 
-    private void checkDead() {
+
+    private boolean checkDead() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                if (board[row][col] == null) return;
+                if (board[row][col] == null) return false;
                 if (checkSurroundingTiles(row, col, board[row][col])) {
-                    return;
+                    return false;
                 }
             }
         }
-        dead = true;
-        //set high score
+        return true;
     }
 
-    private boolean checkSurroundingTiles(int row, int col, Tile current) {
+    private boolean checkSurroundingTiles(int row, int col, Tile tile) {
         if (row > 0) {
             Tile check = board[row - 1][col];
             if (check == null) return true;
-            if (current.getValue() == check.getValue()) return true;
+            if (tile.getValue() == check.getValue()) return true;
         }
         if (row < ROWS - 1) {
             Tile check = board[row + 1][col];
             if (check == null) return true;
-            if (current.getValue() == check.getValue()) return true;
+            if (tile.getValue() == check.getValue()) return true;
         }
         if (col > 0) {
             Tile check = board[row][col - 1];
             if (check == null) return true;
-            if (current.getValue() == check.getValue()) return true;
+            if (tile.getValue() == check.getValue()) return true;
         }
         if (col < COLS - 1) {
             Tile check = board[row][col + 1];
             if (check == null) return true;
-            if (current.getValue() == check.getValue()) return true;
+            if (tile.getValue() == check.getValue()) return true;
         }
         return false;
     }

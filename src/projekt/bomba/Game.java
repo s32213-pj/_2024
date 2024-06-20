@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 class Game extends JPanel implements KeyListener, Runnable {
 
     private static final long serialVersionUID = 1L;
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 640;
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 560;
     public static final Font main = new Font("Bebas neue Regular", Font.PLAIN, 28);
     private Thread game;
     private boolean running = false;

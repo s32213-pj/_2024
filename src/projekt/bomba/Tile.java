@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 
 class Tile {
 
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 80;
-    public static final int SLIDE_SPEED = 20;
+    public static final int WIDTH = 100;
+    public static final int HEIGHT = 100;
+    public static final int SLIDE_SPEED = 30;
     public static final int ARC_WIDTH = 15;
     public static final int ARC_HEIGHT = 15;
     private int value;
@@ -73,7 +73,7 @@ class Tile {
             text = new Color(0xffffff);
         } else if (value == 128) {
             background = new Color(0xC3FF49);
-            text = new Color(0xffffff);
+            text = new Color(0x000000);
         } else if (value == 256) {
             background = new Color(0x04F5AD);
             text = new Color(0xffffff);
