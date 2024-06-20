@@ -39,13 +39,14 @@ class Tile {
         this.canCombine = canCombine;
     }
 
-    private boolean canCombine;
+    private boolean canCombine = true;
 
     // Konstruktor
     public Tile(int value, int x, int y) {
         this.value = value;
         this.x = x;
         this.y = y;
+        slideTo = new Point(x,y);
         tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         drawImage();
     }
@@ -109,6 +110,22 @@ class Tile {
         g.dispose();
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public void update() {
         // Aktualizacja stanu kafelka
     }
@@ -122,6 +139,7 @@ class Tile {
     }
     public void setValue(int value){
         this.value = value;
+        drawImage();
     }
 
     public boolean setCanCombine() {

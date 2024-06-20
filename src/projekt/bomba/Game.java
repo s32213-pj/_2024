@@ -24,7 +24,6 @@ class Game extends JPanel implements KeyListener, Runnable {
         setFocusable(true);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addKeyListener(this);
-
         board = new GameBoard(WIDTH / 2 - GameBoard.BOARD_WIDTH / 2, HEIGHT - GameBoard.BOARD_HEIGHT);
     }
 
@@ -59,8 +58,10 @@ class Game extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Keyboard.keyPressed(e);
+        Keyboard.keyReleased(e);
     }
+
+
 
     @Override
     public void run() {
@@ -119,6 +120,12 @@ class Game extends JPanel implements KeyListener, Runnable {
     public synchronized void stop() {
         if (!running) return;
         running = false;
+        try {
+            game.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
+
 }
