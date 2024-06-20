@@ -112,6 +112,53 @@ class GameBoard {
         }
     }
 
+    private boolean move(int row,int col, int horizontalDirection, int vectricalDirection, Direction dir){
+        boolean canMove = false;
+        Tile current = board[row][col];
+        if(current == null) return false;
+        boolean move = true;
+        int newCol = col;
+        int newRow = row;
+        while(move) {
+            newCol += horizontalDirection;
+            newRow += vectricalDirection;
+            if (checkOutOfBounds(dir, newRow, newCol)) break;
+            if (board[newRow][newCol] == null) {
+                board[newRow][newCol] = current;
+                board[newRow - vectricalDirection][newCol - horizontalDirection] = null;
+                board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
+            }
+            else if (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].setCanCombine()){
+                board[newRow][newCol].setCanCombine(false);
+                board[newRow][newCol].setValue(board[newRow][newCol].getValue() * 2);
+                canMove = true;
+                board[newRow - vectricalDirection][newCol - horizontalDirection] = null;
+                board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
+                //   board[newRow][newCol].setCanCombineAnimation(true);
+                // dodaj score
+            }
+            else{
+                move = false;
+            }
+        }
+        return canMove;
+    }
+    private boolean checkOutOfBounds(Direction dir, int newRow, int newCol){
+        if (dir == Direction.LEFT){
+            return col < 0;
+        }
+        else if (dir == Direction.RIGHT){
+            return col > COLS -1;
+        }
+        else if(dir == Direction.UP){
+            return row < 0;
+        }
+        else if(dir == Direction.DOWN){
+            return row > ROWS -1;
+        }
+        return false;
+    }
+
     private void moveTiles(Direction dir) {
         boolean canMove = false;
         int horizontalDiretion = 0;
@@ -124,46 +171,54 @@ class GameBoard {
                 for (int col = 0; col < COLS; col++) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    }
+                    else move(row, col, horizontalDiretion, verticalDiretion, dir);
                 }
             }
         }
 
 
-        if (dir == Direction.RIGHT) {
+        else if (dir == Direction.RIGHT) {
             horizontalDiretion = 1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = COLS - 1; col >= 0; col--){
                     if (!canMove) {
                         canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    }
+                    else move(row, col, horizontalDiretion, verticalDiretion, dir);
                 }
             }
         }
 
 
-        if (dir == Direction.UP) {
+        else if (dir == Direction.UP) {
             verticalDiretion = -1;
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLS; col++) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    }
+                    else move(row, col, horizontalDiretion, verticalDiretion, dir);
                 }
             }
         }
 
 
-        if (dir == Direction.DOWN) {
+        else if (dir == Direction.DOWN) {
             verticalDiretion = 1;
             for (int row = ROWS -1; row >= 0 ; row--){
                 for (int col = 0; col < COLS; col++) {
                     if (!canMove) {
                         canMove = move(row, col, horizontalDiretion, verticalDiretion, dir);
-                    } else move(row, col, horizontalDiretion, verticalDiretion, dir);
+                    }
+                    else move(row, col, horizontalDiretion, verticalDiretion, dir);
                 }
             }
         }
+        else{
+            System.out.println(dir+ "is not a valid direction.");
+        }
+
         for (int row = 0 ; row < ROWS; row++){
             for(int col= 0 ;col < COLS; col++){
                 Tile current = board[row][col];

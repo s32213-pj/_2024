@@ -30,7 +30,10 @@ class Tile {
 
     public boolean CanCombine() {
         return canCombine;
+        // cos bylo nie tak z gameboard else if w razie co popraw ten kod bo w nim moze cos byc nie tak
+        // (board[newRow][newCol].getValue() == current.getValue() && board[newRow][newCol].setCanCombine()){
     }
+
 
     public void setCanCombine(boolean canCombine) {
         this.canCombine = canCombine;
@@ -116,5 +119,12 @@ class Tile {
 
     public int getValue() {
         return value;
+    }
+    public void setValue(int value){
+        this.value = value;
+    }
+
+    public boolean setCanCombine() {
+        return false;
     }
 }
