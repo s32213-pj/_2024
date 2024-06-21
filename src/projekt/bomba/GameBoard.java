@@ -39,7 +39,7 @@ public class GameBoard {
     public GameBoard(int x, int y) {
         try {
             saveDataPath = Game.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-
+            System.out.println("Save data path: " + saveDataPath);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,48 +53,69 @@ public class GameBoard {
         start();
     }
 
+
     private void createSaveData() {
+        BufferedWriter writer = null;
         try {
             File file = new File(saveDataPath, fileName);
-            FileWriter output = new FileWriter(file);
-            BufferedWriter writer = new BufferedWriter(output);
-            writer.write(""+ 0);
-
-        } catch (Exception e){
+            writer = new BufferedWriter(new FileWriter(file));
+            writer.write("0");
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
-private void loadHighScore() {
-    try {
-        File f = new File(saveDataPath, fileName);
-        if (!f.isFile()) {
-            createSaveData();
-        }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-        highScore = Integer.parseInt(reader.readLine());
-        reader.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    }
-
-private void setHighScore(){
-        FileWriter output = null;
+    private void loadHighScore() {
         try {
             File f = new File(saveDataPath, fileName);
-            output = new FileWriter(f);
-            BufferedWriter writer = new BufferedWriter(output);
-            if (score >= highScore){
-                writer.write("" + highScore);
+            if (!f.isFile()) {
+                createSaveData();
             }
-            writer.close();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
 
-}
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+            String highScoreStr = reader.readLine();
+            if (highScoreStr != null && !highScoreStr.isEmpty()) {
+                highScore = Integer.parseInt(highScoreStr);
+            } else {
+                highScore = 0; // wartość domyślna, jeśli plik jest pusty
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            highScore = 0; // wartość domyślna w przypadku błędu
+        }
+    }
+
+
+    private void setHighScore() {
+        BufferedWriter writer = null;
+        try {
+            File f = new File(saveDataPath, fileName);
+            writer = new BufferedWriter(new FileWriter(f));
+            if (score >= highScore) {
+                writer.write("" + score);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     private void createBoardImage() {
         Graphics2D g = (Graphics2D) gameBoard.getGraphics();
