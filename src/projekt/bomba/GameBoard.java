@@ -21,12 +21,17 @@ public class GameBoard {
     private BufferedImage finalBoard;
     private int x;
     private int y;
+    private int score = 0;
+    private int highScore = 0;
+    private Font scoreFont;
 
     private static int SPACING = 10;
     public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * Tile.WIDTH;
     public static int BOARD_HEIGHT = (ROWS + 1) * SPACING + ROWS * Tile.HEIGHT;
 
     private boolean hasStarted;
+    //save
+    private String saveDataPath;
 
     public GameBoard(int x, int y) {
         this.x = x;
@@ -177,7 +182,7 @@ public class GameBoard {
                 canMove = true;
                 board[newRow - vectricalDirection][newCol - horizontalDirection] = null;
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
-                //   board[newRow][newCol].setCanCombineAnimation(true);
+                board[newRow][newCol].setCombineAnimation(true);
                 // dodaj score
             } else {
                 move = false;
